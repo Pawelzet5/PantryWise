@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">PantryWise</string>
+
+
+    <string name="product_list_header">My Inventory</string>
+    <string name="product_adding_selection_header">How would you like to add your products?</string>
+    <string name="add_product">Add Product</string>
+    <string name="more_options">More Options</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+
+
+    <string name="product_unit_gram">Gram (g)</string>
+    <string name="product_unit_kilogram">Kilogram (kg)</string>
+    <string name="product_unit_milligram">Milligram (mg)</string>
+    <string name="product_unit_pound">Pound (lb)</string>
+    <string name="product_unit_ounce">Ounce (oz)</string>
+    <string name="product_unit_milliliter">Milliliter (ml)</string>
+    <string name="product_unit_liter">Liter (l)</string>
+    <string name="product_unit_teaspoon">Teaspoon (tsp)</string>
+    <string name="product_unit_tablespoon">Tablespoon (tbsp)</string>
+    <string name="product_unit_short_gram">g</string>
+    <string name="product_unit_short_kilogram">kg</string>
+    <string name="product_unit_short_milligram">mg</string>
+    <string name="product_unit_short_pound">lb</string>
+    <string name="product_unit_short_ounce">oz</string>
+    <string name="product_unit_short_milliliter">ml</string>
+    <string name="product_unit_short_liter">l</string>
+    <string name="product_unit_short_teaspoon">tsp</string>
+    <string name="product_unit_short_tablespoon">tbsp</string>
+    <string name="product_unit_cup">Cup</string>
+    <string name="product_unit_pint">Pint</string>
+    <string name="product_unit_quart">Quart</string>
+    <string name="product_unit_gallon">Gallon</string>
+    <string name="product_unit_piece">Piece</string>
+    <string name="product_unit_dozen">Dozen</string>
+    <string name="product_unit_pack">Pack</string>
+    <string name="product_unit_bottle">Bottle</string>
+    <string name="product_unit_can">Can</string>
+    <string name="product_unit_jar">Jar</string>
+    <string name="product_unit_bag">Bag</string>
+    <string name="product_unit_box">Box</string>
+
+    <!-- Product Categories -->
+    <string name="category_dairy_eggs">Dairy &amp; Eggs</string>
+    <string name="category_beverages">Beverages</string>
+    <string name="category_bakery">Bakery</string>
+    <string name="category_meat_seafood">Meat &amp; Seafood</string>
+    <string name="category_produce">Produce</string>
+    <string name="category_grains_cereals">Grains &amp; Cereals</string>
+    <string name="category_canned_goods">Canned Goods</string>
+    <string name="category_condiments_sauces">Condiments &amp; Sauces</string>
+    <string name="category_snacks_sweets">Snacks &amp; Sweets</string>
+    <string name="category_spices_seasonings">Spices &amp; Seasonings</string>
+    <string name="category_oils_fats">Oils &amp; Fats</string>
+    <string name="category_frozen_foods">Frozen Foods</string>
+    <string name="category_pantry_staples">Pantry Staples</string>
+    <string name="category_other">Other</string>
+    <string name="item_count_single">item</string>
+    <string name="item_count_plural">items</string>
 </resources>
