@@ -1,6 +1,6 @@
 package com.example.pantrywise
 
-import AddProductScreen
+import AddingProductScreen
 import android.os.Bundle
 import androidx.activity.*
 import androidx.activity.compose.setContent
@@ -15,15 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import com.example.pantrywise.ui.theme.PantryWiseTheme
-import com.example.pantrywise.view.ProductListView
-import com.example.pantrywise.viewmodel.AddProductViewModel
+import com.example.pantrywise.view.ProductListViewContent
+import com.example.pantrywise.viewmodel.AddingProductViewModel
 import com.example.pantrywise.viewmodel.ProductListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val productListViewModel: ProductListViewModel by viewModels()
-    private val addProductViewModel: AddProductViewModel by viewModels()
+    private val addingProductViewModel: AddingProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +48,13 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         ) {
                             composable("productList") {
-                                ProductListView(
+                                ProductListViewContent(
                                     viewModel = productListViewModel,
                                     navController = navController
                                 )
                             }
                             composable("addProduct") {
-                                AddProductScreen(addProductViewModel = addProductViewModel)
+                                AddingProductScreen(addingProductViewModel = addingProductViewModel)
                             }
                         }
                     }
