@@ -1,42 +1,67 @@
 package com.example.pantrywise.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
+// --- Light Theme Colors ---
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = Green500,
+    onPrimary = WhiteText,
+    primaryContainer = Green100,
+    secondary = Amber600,
+    onSecondary = BlackText,
+    secondaryContainer = Amber50,
+    background = Grey50,
+    onBackground = Grey900,
+    surface = White,
+    onSurface = Grey900Surface,
+    error = Red600,
+    onError = WhiteOnError,
 )
 
+// --- Dark Theme Colors ---
+private val DarkColorScheme = darkColorScheme(
+    primary = Green300,
+    onPrimary = Green900,
+    primaryContainer = Green700,
+    secondary = Amber300,
+    onSecondary = BlackTextDark,
+    secondaryContainer = Amber600Dark,
+    background = TrueBlack,
+    onBackground = Grey300,
+    surface = DarkGrey,
+    onSurface = Grey300Surface,
+    error = Red200,
+    onError = Red900,
+)
+
+/**
+ * PantryWiseTheme applies the color scheme and typography to your app.
+ *
+ * Usage:
+ * - Wrap your entire app (or each screen) in PantryWiseTheme.
+ * - Use MaterialTheme.colorScheme.primary, .secondary, etc. for colors in your UI.
+ * - Use MaterialTheme.typography for text styles.
+ * - Use MaterialTheme.shapes for shapes.
+ *
+ * Example:
+ * ```kotlin
+ * PantryWiseTheme {
+ *     Surface(color = MaterialTheme.colorScheme.background) {
+ *         Text("Hello", color = MaterialTheme.colorScheme.primary)
+ *     }
+ * }
+ * ```
+ *
+ * Compose will automatically switch between light and dark themes based on the system setting,
+ * unless you override [darkTheme].
+ */
 @Composable
 fun PantryWiseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
