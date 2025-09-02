@@ -1,4 +1,4 @@
-package com.example.pantrywise.ui.Helpers
+package com.example.pantrywise.util
 
 import java.time.Instant
 import java.time.LocalDate
@@ -10,6 +10,6 @@ object DateTimeHelper {
         val zoneId = ZoneId.systemDefault()
         val date = Instant.ofEpochMilli(timestampMillis).atZone(zoneId).toLocalDate()
         val today = LocalDate.now(zoneId)
-        return ChronoUnit.DAYS.between(date, today).toInt()
+        return ChronoUnit.DAYS.between(today, date).toInt()
     }
-} 
+}
