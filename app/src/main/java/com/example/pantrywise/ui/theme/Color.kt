@@ -33,6 +33,7 @@ val Grey900Surface = Color(0xFF212121)        // Light theme on surface
 val Grey300Surface = Color(0xFFE0E0E0)        // Dark theme on surface
 
 // --- Error Colors ---
+val RedError = Color(0xFFFF2929)
 val Red600 = Color(0xFFE53935)                // Light theme error
 val Red200 = Color(0xFFEF9A9A)                // Dark theme error
 val WhiteOnError = Color(0xFFFFFFFF)          // Light theme on error
