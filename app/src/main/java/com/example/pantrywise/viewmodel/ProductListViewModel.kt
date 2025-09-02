@@ -23,7 +23,8 @@ class ProductListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             repository.getProducts().collect { products ->
-                _products.value = products
+                // TODO("Replace with `it` when done coding")
+                _products.value = MockDataHelper.getMockProductList()
             }
         }
     }
