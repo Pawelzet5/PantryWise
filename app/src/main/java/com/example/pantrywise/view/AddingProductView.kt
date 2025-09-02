@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.example.pantrywise.model.dataclass.Product
 import com.example.pantrywise.model.enums.ProductCategory
 import com.example.pantrywise.model.enums.ProductUnit
-import com.example.pantrywise.ui.Helpers.DateTimeHelper
+import com.example.pantrywise.util.DateTimeHelper
 import com.example.pantrywise.view.ProductInputState
 import com.example.pantrywise.viewmodel.AddingProductViewModel
 import java.time.LocalDate
