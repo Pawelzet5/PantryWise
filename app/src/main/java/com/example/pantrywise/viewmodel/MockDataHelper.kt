@@ -9,6 +9,7 @@ object MockDataHelper {
     fun getMockProductList() = listOf(
         Product(
             name = "Milk",
+            details = "3.2%",
             quantity = 2.0,
             productUnit = ProductUnit.LITER,
             category = ProductCategory.BEVERAGES,
@@ -16,6 +17,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Bread",
+            details = "",
             quantity = 1.0,
             productUnit = ProductUnit.PIECE,
             category = ProductCategory.BAKERY,
@@ -23,6 +25,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Burger Buns",
+            details = "",
             quantity = 4.0,
             productUnit = ProductUnit.PIECE,
             category = ProductCategory.BAKERY,
@@ -30,6 +33,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Grahamki",
+            details = "",
             quantity = 5.0,
             productUnit = ProductUnit.PIECE,
             category = ProductCategory.BAKERY,
@@ -37,6 +41,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Apples",
+            details = "",
             quantity = 6.0,
             productUnit = ProductUnit.PIECE,
             category = ProductCategory.PRODUCE,
@@ -44,6 +49,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Chicken Breast",
+            details = "",
             quantity = 500.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.MEAT_SEAFOOD,
@@ -51,24 +57,28 @@ object MockDataHelper {
         ),
         Product(
             name = "Rice",
+            details = "",
             quantity = 1.0,
             productUnit = ProductUnit.KILOGRAM,
             category = ProductCategory.GRAINS_CEREALS
         ),
         Product(
             name = "Olive Oil",
+            details = "",
             quantity = 250.0,
             productUnit = ProductUnit.MILLILITER,
             category = ProductCategory.OILS_FATS
         ),
         Product(
             name = "Salt",
+            details = "",
             quantity = 100.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.SPICES_SEASONINGS
         ),
         Product(
             name = "Eggs",
+            details = "",
             quantity = 12.0,
             productUnit = ProductUnit.PIECE,
             category = ProductCategory.DAIRY_EGGS,
@@ -76,6 +86,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Cheese",
+            details = "",
             quantity = 200.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.DAIRY_EGGS,
@@ -83,13 +94,23 @@ object MockDataHelper {
         ),
         Product(
             name = "Mozzarella",
+            details = "Fior di Latte",
             quantity = 200.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.DAIRY_EGGS,
             expirationDate = Calendar.getInstance().timeInMillis.plus(86400000*3)
         ),
         Product(
+            name = "Mozzarella",
+            details = "Lidlowa",
+            quantity = 2.0,
+            productUnit = ProductUnit.BAG,
+            category = ProductCategory.DAIRY_EGGS,
+            expirationDate = Calendar.getInstance().timeInMillis.plus(86400000*3)
+        ),
+        Product(
             name = "Cheddar",
+            details = "",
             quantity = 200.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.DAIRY_EGGS,
@@ -97,6 +118,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Gouda",
+            details = "",
             quantity = 200.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.DAIRY_EGGS,
@@ -104,6 +126,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Monterey Jack",
+            details = "",
             quantity = 200.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.DAIRY_EGGS,
@@ -111,6 +134,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Burrata",
+            details = "",
             quantity = 200.0,
             productUnit = ProductUnit.GRAM,
             category = ProductCategory.DAIRY_EGGS,
@@ -118,6 +142,7 @@ object MockDataHelper {
         ),
         Product(
             name = "Tomatoes",
+            details = "Włoskie Mutti",
             quantity = 4.0,
             productUnit = ProductUnit.PIECE,
             category = ProductCategory.PRODUCE,
