@@ -25,7 +25,7 @@ class ProductListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getProducts().collect { products ->
                 if (products.isEmpty())
-                    repository.seedSampleData() // TODO(Remove when solid)
+                    repository.seedSampleData() // TODO(Remove when version is solid and functional)
                 else
                     _products.value = products
             }
