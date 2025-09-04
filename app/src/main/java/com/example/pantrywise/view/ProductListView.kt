@@ -4,13 +4,10 @@ import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
@@ -20,14 +17,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pantrywise.model.dataclass.Product
 import com.example.pantrywise.model.enums.ProductCategory
-import com.example.pantrywise.model.enums.ProductUnit
 import com.example.pantrywise.ui.extensions.getIcon
+import com.example.pantrywise.ui.theme.PantryWiseTheme
 import com.example.pantrywise.util.DateTimeHelper
+import com.example.pantrywise.viewmodel.MockDataHelper
 import com.example.pantrywise.viewmodel.ProductListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +52,9 @@ fun ProductListViewContent(
         },
         onRemoveProduct = { product ->
             viewModel.deleteProduct(product)
+        },
+        onMoveProductToShoppingList = { product ->
+            viewModel.moveProductToShoppingList(product)
         }
     )
 }
@@ -62,24 +64,34 @@ fun ProductListViewContent(
 private fun ProductListViewContent(
     products: List<Product>,
     onEditProduct: (Product) -> Unit,
-    onRemoveProduct: (Product) -> Unit
+    onRemoveProduct: (Product) -> Unit,
+    onMoveProductToShoppingList: (Product) -> Unit
 ) {
     val groupedProducts = products.groupBy { it.category }
     val expandedCategories = remember { mutableStateSetOf<ProductCategory>() }
+    var selectedProduct by remember { mutableStateOf<Product?>(null) }
 
     ProductListViewWithHorizontalGridContent(
         groupedProducts = groupedProducts,
         expandedCategories = expandedCategories,
-        onEditProduct = onEditProduct,
-        onRemoveProduct = onRemoveProduct,
         onToggleExpanded = { category ->
             if (expandedCategories.contains(category)) {
                 expandedCategories.remove(category)
             } else {
                 expandedCategories.add(category)
             }
-        }
+        },
+        onProductSelected = { selectedProduct = it }
     )
+    selectedProduct?.let {
+        ProductActionMenu(
+            it,
+            onDismiss = { selectedProduct = null },
+            onRemove = onRemoveProduct,
+            onMove = onMoveProductToShoppingList,
+            onEdit = onEditProduct
+        )
+    }
 
 }
 
@@ -87,17 +99,13 @@ private fun ProductListViewContent(
 fun ProductListViewWithHorizontalGridContent(
     groupedProducts: Map<ProductCategory, List<Product>>,
     expandedCategories: MutableSet<ProductCategory>,
-    onEditProduct: (Product) -> Unit,
-    onRemoveProduct: (Product) -> Unit,
     onToggleExpanded: (ProductCategory) -> Unit,
-    paddingValues: PaddingValues = PaddingValues(0.dp)
+    onProductSelected: (Product) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         groupedProducts.forEach { (category, categoryProducts) ->
             item {
@@ -120,16 +128,17 @@ fun ProductListViewWithHorizontalGridContent(
                         onToggleExpanded = { onToggleExpanded(category) }
                     )
                     if (expandedCategories.contains(category)) {
-                        ProductsGrid(categoryProducts)
+                        ProductsGrid(categoryProducts, onProductSelected = onProductSelected)
                     }
                 }
             }
         }
     }
+
 }
 
 @Composable
-fun ProductsGrid(products: List<Product>) {
+fun ProductsGrid(products: List<Product>, onProductSelected: (Product) -> Unit) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier.fillMaxWidth().padding(8.dp).heightIn(max = 300.dp),
@@ -137,17 +146,19 @@ fun ProductsGrid(products: List<Product>) {
         verticalItemSpacing = 12.dp,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(products) { item ->
-            ProductCard(item) // Replace with your item composable
+        items(products) { product ->
+            ProductCard(
+                product = product,
+                onProductSelected = { onProductSelected(product) }
+            )
         }
     }
 }
 
-
 @Composable
-fun ProductCard(product: Product, modifier: Modifier = Modifier) {
+fun ProductCard(product: Product, onProductSelected: () -> Unit) {
     ElevatedCard(
-        modifier = modifier,
+        modifier = Modifier.combinedClickable(onClick = {}, onLongClick = onProductSelected),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(
@@ -158,7 +169,13 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier) {
         ) {
             Text(text = product.name, style = MaterialTheme.typography.titleMedium)
             Text(
-                text = "${product.quantity} ${getUnitShortLabel(product.productUnit)}",
+                text = product.details,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = getProductAmountText(product),
                 style = MaterialTheme.typography.bodySmall
             )
             product.expirationDate?.let {
@@ -171,75 +188,16 @@ fun ProductCard(product: Product, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun ProductListPreview() {
-    ProductListViewWithHorizontalGridContent(
-        groupedProducts = listOf(
-            Product(
-                name = "Milk",
-                quantity = 2.0,
-                productUnit = ProductUnit.LITER,
-                category = ProductCategory.BEVERAGES
-            ),
-            Product(
-                name = "Bread",
-                quantity = 1.0,
-                productUnit = ProductUnit.PIECE,
-                category = ProductCategory.BAKERY
-            ),
-            Product(
-                name = "Apples",
-                quantity = 6.0,
-                productUnit = ProductUnit.PIECE,
-                category = ProductCategory.PRODUCE
-            ),
-            Product(
-                name = "Chicken Breast",
-                quantity = 500.0,
-                productUnit = ProductUnit.GRAM,
-                category = ProductCategory.MEAT_SEAFOOD
-            ),
-            Product(
-                name = "Rice",
-                quantity = 1.0,
-                productUnit = ProductUnit.KILOGRAM,
-                category = ProductCategory.GRAINS_CEREALS
-            ),
-            Product(
-                name = "Olive Oil",
-                quantity = 250.0,
-                productUnit = ProductUnit.MILLILITER,
-                category = ProductCategory.OILS_FATS
-            ),
-            Product(
-                name = "Salt",
-                quantity = 100.0,
-                productUnit = ProductUnit.GRAM,
-                category = ProductCategory.SPICES_SEASONINGS
-            ),
-            Product(
-                name = "Eggs",
-                quantity = 12.0,
-                productUnit = ProductUnit.PIECE,
-                category = ProductCategory.DAIRY_EGGS
-            ),
-            Product(
-                name = "Cheese",
-                quantity = 200.0,
-                productUnit = ProductUnit.GRAM,
-                category = ProductCategory.DAIRY_EGGS
-            ),
-            Product(
-                name = "Tomatoes",
-                quantity = 4.0,
-                productUnit = ProductUnit.PIECE,
-                category = ProductCategory.PRODUCE
-            )
-        ).groupBy { it.category },
-        mutableSetOf(ProductCategory.BAKERY),
-        {},
-        {},
-        {}
-    )
+    PantryWiseTheme {
+        ProductListViewWithHorizontalGridContent(
+            groupedProducts = MockDataHelper.getMockProductList().groupBy { it.category },
+            mutableSetOf(ProductCategory.BAKERY),
+            {},
+            {}
+        )
+    }
 }
+
 @Composable
 fun ExpirationDateInfo(expirationTimeStamp: Long) {
     val daysToExpiration = DateTimeHelper.daysBetweenTimestampAndNow(expirationTimeStamp)
@@ -304,9 +262,4 @@ fun ProductCategoryHeader(
             tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
-}
-
-@Composable
-fun getUnitShortLabel(unit: ProductUnit): String {
-    return stringResource(unit.shortLabelResId ?: unit.labelResId)
 }

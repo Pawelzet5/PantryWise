@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 // --- Primary Colors ---
 val Green500 = Color(0xFF4CAF50)              // Light theme primary
 val Green300 = Color(0xFF81C784)              // Dark theme primary
-val Green100 = Color(0xFFC8E6C9)              // Light theme primary container
+val Green100 = Color(0xFFE2F4E9)              // Light theme primary container
 val Green700 = Color(0xFF388E3C)              // Dark theme primary container
 
 // --- Secondary Colors ---
