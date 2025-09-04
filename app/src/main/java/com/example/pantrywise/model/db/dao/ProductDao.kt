@@ -11,8 +11,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM $PRODUCT_TABLE ORDER BY id ASC")
+    @Query("""SELECT * FROM $PRODUCT_TABLE WHERE productStatus = "INVENTORY"  ORDER BY id ASC""")
     fun getProductList(): Flow<List<DbProduct>>
+
+    @Query("""SELECT * FROM $PRODUCT_TABLE WHERE productStatus = "SHOPPING_LIST" ORDER BY id ASC""")
+    fun getShoppingList(): Flow<List<DbProduct>>
 
     @Upsert
     suspend fun upsertProduct(dbProduct: DbProduct)

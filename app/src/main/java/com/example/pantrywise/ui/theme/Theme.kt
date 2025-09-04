@@ -11,14 +11,16 @@ private val LightColorScheme = lightColorScheme(
     primary = Green500,
     onPrimary = WhiteText,
     primaryContainer = Green100,
+    onPrimaryContainer = BlackText,
     secondary = Amber600,
     onSecondary = BlackText,
     secondaryContainer = Amber50,
+    onSecondaryContainer = BlackText,
     background = Grey50,
     onBackground = Grey900,
     surface = White,
     onSurface = Grey900Surface,
-    error = Red600,
+    error = RedError,
     onError = WhiteOnError,
 )
 
@@ -62,7 +64,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun PantryWiseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

@@ -8,6 +8,7 @@ import com.example.pantrywise.model.enums.ProductUnit
 // State holder for a single product input
 data class ProductInputState(
     val name: String = "",
+    val details: String = "",
     val quantity: String = "",
     val expirationDate: Long? = null,
     val unit: ProductUnit = ProductUnit.PIECE,
@@ -18,6 +19,7 @@ data class ProductInputState(
 
     fun toProduct() = Product(
         name = name,
+        details = details,
         quantity = quantity.toDoubleOrNull() ?: 1.0,
         productUnit = unit,
         category = category,

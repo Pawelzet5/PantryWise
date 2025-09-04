@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 // --- Primary Colors ---
 val Green500 = Color(0xFF4CAF50)              // Light theme primary
 val Green300 = Color(0xFF81C784)              // Dark theme primary
-val Green100 = Color(0xFFC8E6C9)              // Light theme primary container
+val Green100 = Color(0xFFE2F4E9)              // Light theme primary container
 val Green700 = Color(0xFF388E3C)              // Dark theme primary container
 
 // --- Secondary Colors ---
@@ -33,6 +33,7 @@ val Grey900Surface = Color(0xFF212121)        // Light theme on surface
 val Grey300Surface = Color(0xFFE0E0E0)        // Dark theme on surface
 
 // --- Error Colors ---
+val RedError = Color(0xFFFF2929)
 val Red600 = Color(0xFFE53935)                // Light theme error
 val Red200 = Color(0xFFEF9A9A)                // Dark theme error
 val WhiteOnError = Color(0xFFFFFFFF)          // Light theme on error
