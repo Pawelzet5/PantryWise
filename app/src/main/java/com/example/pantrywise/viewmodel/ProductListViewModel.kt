@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.pantrywise.data.repository.IProductRepository
 import com.example.pantrywise.model.dataclass.Product
 import com.example.pantrywise.model.enums.ProductStatus
-import com.example.pantrywise.util.LogUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,7 +24,6 @@ class ProductListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             repository.getProducts().collect { products ->
-                LogUtils.debug(products.toString())
                 if (products.isEmpty())
                     repository.seedSampleData() // TODO(Remove when solid)
                 else

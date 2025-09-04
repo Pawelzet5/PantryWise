@@ -24,7 +24,6 @@ class ProductRepository @Inject constructor(
     }
     
     override suspend fun addProduct(product: Product) {
-        LogUtils.debug("addProduct: ${product}")
         val dbProduct = DbProduct.fromProduct(product)
         productDao.upsertProduct(dbProduct)
     }
@@ -40,7 +39,6 @@ class ProductRepository @Inject constructor(
     }
     
     override suspend fun seedSampleData() {
-        LogUtils.debug("seedSampleData")
         val sampleProducts = listOf(
             Product(
                 name = "Milk",
