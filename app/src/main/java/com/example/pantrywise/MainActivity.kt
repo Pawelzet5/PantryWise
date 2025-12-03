@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import com.example.pantrywise.ui.theme.PantryWiseTheme
-import com.example.pantrywise.view.ProductListViewContent
+import com.example.pantrywise.view.productlist.ProductListViewContent
 import com.example.pantrywise.viewmodel.AddingProductViewModel
-import com.example.pantrywise.viewmodel.ProductListViewModel
+import com.example.pantrywise.view.productlist.ProductListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
