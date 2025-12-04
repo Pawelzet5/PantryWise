@@ -22,8 +22,7 @@ fun NavigationRoot(
 ) {
     val backStack by navigationViewModel.backStack.collectAsStateWithLifecycle()
     NavDisplay(
-        modifier = modifier.fillMaxSize()
-            .padding(horizontal = 4.dp),
+        modifier = modifier.fillMaxSize(),
         onBack = { navigationViewModel.pop() },
         backStack = backStack,
         entryDecorators = listOf(
