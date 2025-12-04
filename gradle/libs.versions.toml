@@ -9,6 +9,8 @@ lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2025.10.00"
 room = "2.7.2"
+uiTextGoogleFonts = "1.9.0"
+
 
 nav3Core = "1.0.0-alpha11"
 nav3Lifecycle = "1.0.0-alpha04"
@@ -38,6 +40,7 @@ androidx-compose-material-icons-extended = { group = "androidx.compose.material"
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 nav3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 nav3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
