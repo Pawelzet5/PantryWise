@@ -2,7 +2,9 @@
     <string name="app_name">PantryWise</string>
 
 
-    <string name="product_list_header">My Inventory</string>
+    <string name="inventory_header">My Inventory</string>
+    <string name="adding_product_header">Add to inventory</string>
+    <string name="shopping_list_header">Shopping list</string>
     <string name="product_adding_selection_header">How would you like to add your products?</string>
     <string name="add_product">Add Product</string>
     <string name="more_options">More Options</string>

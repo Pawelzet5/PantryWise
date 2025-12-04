@@ -1,89 +1,103 @@
 package com.example.pantrywise
 
-import AddingProductScreen
 import android.os.Bundle
-import androidx.activity.*
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.compose.*
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pantrywise.ui.theme.PantryWiseTheme
-import com.example.pantrywise.view.ProductListViewContent
-import com.example.pantrywise.viewmodel.AddingProductViewModel
-import com.example.pantrywise.viewmodel.ProductListViewModel
+import com.example.pantrywise.view.NavigationRoot
+import com.example.pantrywise.view.navigation.*
+import com.example.pantrywise.viewmodel.MainScaffoldAction
+import com.example.pantrywise.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val productListViewModel: ProductListViewModel by viewModels()
-    private val addingProductViewModel: AddingProductViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             PantryWiseTheme {
-                val navController = rememberNavController()
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route
-
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(
-                        topBar = { MainTopBar(currentRoute) },
-                        floatingActionButton = { MainFab(currentRoute, navController) }
-                    ) { innerPadding ->
-                        NavHost(
-                            navController = navController,
-                            startDestination = "productList",
-                            modifier = Modifier.padding(innerPadding)
-                        ) {
-                            composable("productList") {
-                                ProductListViewContent(
-                                    viewModel = productListViewModel,
-                                    navController = navController
-                                )
-                            }
-                            composable("addProduct") {
-                                AddingProductScreen(addingProductViewModel = addingProductViewModel)
-                            }
-                        }
-                    }
-                }
+                AppRoot()
             }
         }
     }
 }
 
+@Composable
+fun AppRoot(mainViewModel: MainViewModel = hiltViewModel()) {
+    val scaffoldState by mainViewModel.scaffoldState.collectAsStateWithLifecycle()
+    Scaffold(
+        topBar = {
+            scaffoldState.topBarTextResId?.let {
+                MainTopBar(
+                    showBackButton = scaffoldState.showBackButton,
+                    onBackClick = { mainViewModel.onAction(MainScaffoldAction.OnBackClick) },
+                    text = stringResource(it)
+                )
+            }
+        },
+        floatingActionButton = {
+            MainFab(
+                showButton = scaffoldState.showAddButton,
+                onClick = { mainViewModel.onAction(MainScaffoldAction.OnAddClick(it)) }
+            )
+        }
+    ) { innerPadding ->
+        NavigationRoot(Modifier.padding(innerPadding))
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopBar(currentRoute: String?) {
+fun MainTopBar(
+    showBackButton: Boolean,
+    onBackClick: () -> Unit,
+    text: String
+) {
     TopAppBar(
-        title = {
-            Text(
-                text = when (currentRoute) {
-                    "addProduct" -> "Add new product"
-                    else -> "My Inventory"
+        title = { Text(text = text) },
+        navigationIcon = {
+            if (showBackButton)
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
-            )
         }
     )
 }
 
 @Composable
-fun MainFab(currentRoute: String?, navController: NavController) {
-    if (currentRoute == "productList") {
-        FloatingActionButton(onClick = { navController.navigate("addProduct") }) {
-            Icon(Icons.Default.Add, contentDescription = "Add Product")
-        }
-    }
+fun MainFab(
+    showButton: Boolean,
+    onClick: (AppNavKey) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    SpeedDialFab(
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        },
+        onAddManual = {
+            expanded = false
+            onClick(AddingProductScreenKey)
+
+        },
+        onAddCamera = {
+            expanded = false
+            onClick(AddingProductWithCameraScreenKey)
+        },
+        visible = showButton
+    )
 }

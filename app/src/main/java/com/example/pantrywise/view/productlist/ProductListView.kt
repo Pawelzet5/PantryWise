@@ -1,4 +1,4 @@
-package com.example.pantrywise.view
+package com.example.pantrywise.view.productlist
 
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
@@ -20,14 +20,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.pantrywise.model.dataclass.Product
 import com.example.pantrywise.model.enums.ProductCategory
 import com.example.pantrywise.ui.extensions.getIcon
 import com.example.pantrywise.ui.theme.PantryWiseTheme
 import com.example.pantrywise.util.DateTimeHelper
+import com.example.pantrywise.view.ProductActionMenu
+import com.example.pantrywise.view.getProductAmountText
 import com.example.pantrywise.viewmodel.MockDataHelper
-import com.example.pantrywise.viewmodel.ProductListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,61 +37,41 @@ fun ProductListViewContent(
     viewModel: ProductListViewModel,
     navController: NavController
 ) {
-    val products by viewModel.products.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     // Show error message if any
-    errorMessage?.let { message ->
-        Toast.makeText(navController.context, message, Toast.LENGTH_LONG).show()
-        viewModel.clearError()
+    state.errorMessage?.let {
+        Toast.makeText(navController.context, it, Toast.LENGTH_LONG).show()
     }
 
     ProductListViewContent(
-        products = products,
-        onEditProduct = { product ->
-            val updatedProduct = product.copy(quantity = product.quantity + 1)
-            viewModel.updateProduct(updatedProduct)
-        },
-        onRemoveProduct = { product ->
-            viewModel.deleteProduct(product)
-        },
-        onMoveProductToShoppingList = { product ->
-            viewModel.moveProductToShoppingList(product)
-        }
+        state = state,
+        onAction = viewModel::onAction
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProductListViewContent(
-    products: List<Product>,
-    onEditProduct: (Product) -> Unit,
-    onRemoveProduct: (Product) -> Unit,
-    onMoveProductToShoppingList: (Product) -> Unit
+    state: ProductListState,
+    onAction: (ProductListAction) -> Unit
 ) {
-    val groupedProducts = products.groupBy { it.category }
-    val expandedCategories = remember { mutableStateSetOf<ProductCategory>() }
-    var selectedProduct by remember { mutableStateOf<Product?>(null) }
 
     ProductListViewWithHorizontalGridContent(
-        groupedProducts = groupedProducts,
-        expandedCategories = expandedCategories,
+        groupedProducts = state.categoryToProductListMap,
+        expandedCategories = state.expandedCategories,
         onToggleExpanded = { category ->
-            if (expandedCategories.contains(category)) {
-                expandedCategories.remove(category)
-            } else {
-                expandedCategories.add(category)
-            }
+            onAction(ProductListAction.OnExpandCategoryClick(category))
         },
-        onProductSelected = { selectedProduct = it }
+        onProductSelected = { onAction(ProductListAction.OnProductSelected(it)) }
     )
-    selectedProduct?.let {
+    state.selectedProduct?.let {
         ProductActionMenu(
             it,
-            onDismiss = { selectedProduct = null },
-            onRemove = onRemoveProduct,
-            onMove = onMoveProductToShoppingList,
-            onEdit = onEditProduct
+            onDismiss = { onAction(ProductListAction.OnProductDeselected) },
+            onRemove = { onAction(ProductListAction.OnRemoveProductClick) },
+            onMove = { onAction(ProductListAction.OnMoveProductClick) },
+            onEdit = { onAction(ProductListAction.OnEditProductClick) }
         )
     }
 
@@ -98,7 +80,7 @@ private fun ProductListViewContent(
 @Composable
 fun ProductListViewWithHorizontalGridContent(
     groupedProducts: Map<ProductCategory, List<Product>>,
-    expandedCategories: MutableSet<ProductCategory>,
+    expandedCategories: Set<ProductCategory>,
     onToggleExpanded: (ProductCategory) -> Unit,
     onProductSelected: (Product) -> Unit
 ) {
