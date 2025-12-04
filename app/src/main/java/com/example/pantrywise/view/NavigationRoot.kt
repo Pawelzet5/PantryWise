@@ -1,24 +1,24 @@
 package com.example.pantrywise.view
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.pantrywise.view.navigation.*
+import com.example.pantrywise.view.productlist.ProductListViewContent
 import com.example.pantrywise.viewmodel.NavigationViewModel
 
 
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
-    navigationViewModel: NavigationViewModel
+    navigationViewModel: NavigationViewModel = hiltViewModel()
 ) {
     val backStack by navigationViewModel.backStack.collectAsStateWithLifecycle()
     NavDisplay(
@@ -34,13 +34,13 @@ fun NavigationRoot(
 
                 is WelcomeScreenKey -> {
                     NavEntry(key = key) {
-                        // TODO
+                        WelcomeScreen(onStartClick = { navigationViewModel.leaveWelcomeScreen() })
                     }
                 }
 
                 is InventoryScreenKey -> {
                     NavEntry(key = key) {
-                        // TODO
+                        ProductListViewContent()
                     }
                 }
 
